@@ -62,9 +62,19 @@ test('UI controls of login page', async ({ page }) => {
 	const signIn = page.locator("input#signInBtn");
 	//selects "User" radio button
 	await page.locator(".radiotextsty").last().click();
-	//selects okay button on the pop-up
+	//returns and prints the boolean value based on selection
+	console.log(page.locator(".radiotextsty").last().isChecked());
+	//validates the radio button is selected or not
+	await expect(page.locator(".radiotextsty").last()).toBeChecked();
+	//selects okay button over the pop-up
 	await page.locator("#okayBtn").click();
 	const dropdown = page.locator("select.form-control");
 	await dropdown.selectOption("consult");
-	await page.pause();
+	//clicks on the checkbox
+	await page.locator("#terms").click();
+	//validates whether checkbox is selected or not
+	await expect(page.locator("#terms")).toBeChecked();
+	//unchecks the already selected check-box
+	await page.locator("#terms").uncheck();
+	expect(await page.locator("#terms").isChecked()).toBeFalsy();
 })
