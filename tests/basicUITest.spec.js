@@ -54,3 +54,17 @@ test('Accessing first product of ecommerce application after sucessful Login', a
 	const allTitles = await cardTitles.allTextContents();
 	console.log(allTitles);
 })
+
+test('UI controls of login page', async ({ page }) => {
+	await page.goto("https://rahulshettyacademy.com/loginpagePractise/");
+
+	const userName = page.locator("input#username");
+	const signIn = page.locator("input#signInBtn");
+	//selects "User" radio button
+	await page.locator(".radiotextsty").last().click();
+	//selects okay button on the pop-up
+	await page.locator("#okayBtn").click();
+	const dropdown = page.locator("select.form-control");
+	await dropdown.selectOption("consult");
+	await page.pause();
+})
