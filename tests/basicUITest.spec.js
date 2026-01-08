@@ -30,6 +30,7 @@ test('Extracting error message and validating from web page', async ({ page }) =
 test('Accessing first product of ecommerce application after sucessful Login', async ({ page }) => {
 	const userName = page.locator("input#username");
 	const signIn = page.locator("input#signInBtn");
+	const cardTitles = page.locator(".card-body a");
 
 	await page.goto("https://rahulshettyacademy.com/loginpagePractise/");
 	console.log(await page.title());
@@ -48,5 +49,8 @@ test('Accessing first product of ecommerce application after sucessful Login', a
 	await userName.fill("rahulshettyacademy");
 	await signIn.click();
 	//printing first element in console from the list of web elements
-	console.log(await page.locator(".card-body a").first().textContent());
+	console.log(await cardTitles.first().textContent());
+	//storing the text of all webelements in array
+	const allTitles = await cardTitles.allTextContents();
+	console.log(allTitles);
 })
