@@ -55,11 +55,13 @@ test('Accessing first product of ecommerce application after sucessful Login', a
 	console.log(allTitles);
 })
 
-test('UI controls of login page', async ({ page }) => {
+test.only('UI controls of login page', async ({ page }) => {
 	await page.goto("https://rahulshettyacademy.com/loginpagePractise/");
 
 	const userName = page.locator("input#username");
 	const signIn = page.locator("input#signInBtn");
+	//locator of blinking Text
+	const blinkingText = page.locator("[href*='documents-request']");
 	//selects "User" radio button
 	await page.locator(".radiotextsty").last().click();
 	//returns and prints the boolean value based on selection
@@ -76,5 +78,8 @@ test('UI controls of login page', async ({ page }) => {
 	await expect(page.locator("#terms")).toBeChecked();
 	//unchecks the already selected check-box
 	await page.locator("#terms").uncheck();
+	//checks whether the checkbox is unselected or not
 	expect(await page.locator("#terms").isChecked()).toBeFalsy();
+	//assertion to validate the attribute of blinkingText
+	await expect(blinkingText).toHaveAttribute("class", "blinkingText");
 })
