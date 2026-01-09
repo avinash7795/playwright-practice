@@ -55,7 +55,7 @@ test('Accessing first product of ecommerce application after sucessful Login', a
 	console.log(allTitles);
 })
 
-test.only('UI controls of login page', async ({ page }) => {
+test('UI controls of login page', async ({ page }) => {
 	await page.goto("https://rahulshettyacademy.com/loginpagePractise/");
 
 	const userName = page.locator("input#username");
@@ -82,4 +82,22 @@ test.only('UI controls of login page', async ({ page }) => {
 	expect(await page.locator("#terms").isChecked()).toBeFalsy();
 	//assertion to validate the attribute of blinkingText
 	await expect(blinkingText).toHaveAttribute("class", "blinkingText");
+})
+
+test.only('Child window handle through event listener', async ({ browser }) => {
+	const context = await browser.newContext();
+	const page = await context.newPage();
+	const userName = page.locator("#username");
+	const documentLink = page.locator("[href*='documents-request']");
+	await page.goto("https://rahulshettyacademy.com/loginpagePractise/");
+
+	//will catch the child window page context
+	const [newPage] = await Promise.all(
+		[context.waitForEvent('page'), //listens for any new page pending, rejected and fulfilled
+		documentLink.click(), //opens new page
+		]
+	)
+
+	const text = await newPage.locator(".red").textContent();
+	console.log(text);
 })
