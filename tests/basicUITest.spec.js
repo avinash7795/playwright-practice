@@ -96,8 +96,17 @@ test.only('Child window handle through event listener', async ({ browser }) => {
 		[context.waitForEvent('page'), //listens for any new page pending, rejected and fulfilled
 		documentLink.click(), //opens new page
 		]
-	)
-
+	);
+	//fetching the text content of a paragraph
 	const text = await newPage.locator(".red").textContent();
 	console.log(text);
+	//getting the partial text from the paragraph using split method
+	const arrayText = text.split("@");
+	//seperating required text from the partial text
+	const domain = arrayText[1].split(" ")[0];
+	console.log(domain);
+	//typing extracted text in username field of previous page
+	await page.locator("#username").fill(domain);
+	console.log(await page.locator("#username").textContent());
+
 })
