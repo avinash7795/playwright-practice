@@ -8,6 +8,7 @@ test('Printing the titles of all products using additonal wait', async ({ page }
 	const products = page.locator(".card-body");
 	const productName = 'ZARA COAT 3';
 	const cartBtn = page.locator("[routerlink*='cart']");
+	const dropdown = page.locator(".ta-results");
 
 	await page.goto("https://rahulshettyacademy.com/client/#/auth/login");
 	await userName.fill("kunapareddy.avi@gmail.com");
@@ -39,5 +40,24 @@ test('Printing the titles of all products using additonal wait', async ({ page }
 	/*verifying the product 'ZARA COAT 3' is visible in the cart page
 	by using pseudo-class in the locator and isVisible method*/
 	const isPresent = await page.locator("h3:has-text('ZARA COAT 3')").isVisible();
+	//verifying the presence of product in cart page to be True
 	expect(isPresent).toBeTruthy();
+	//clicking on Checkout button
+	await page.locator("text=Checkout").click();
+	//typing "ind" word charecter by charecter in the auto suggestive dropdown
+	await page.locator("[placeholder*='Country']").pressSequentially("ind");
+	//waiting till the dropdown elements are loaded
+	await dropdown.waitFor();
+	//fetching the count of suggestive options from the dropdown
+	const optionsCount = await dropdown.locator("button").count();
+	//locating and clicking on dropwdown text "India"
+	for (let i = 0; i < optionsCount; i++) {
+		//fetching the text content from the nth element from auto suggestive options
+		const suggestedText = await dropdown.locator("button").nth(i).textContent();
+		if (suggestedText === " India") {
+			//clicking on "India" text
+			await dropdown.locator("button").nth(i).click();
+			break;
+		}
+	}
 })
