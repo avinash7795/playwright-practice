@@ -7,7 +7,7 @@ test('Printing the titles of all products using additonal wait', async ({ page }
 	const cardTitles = page.locator(".card-body b");
 	const products = page.locator(".card-body");
 	const productName = 'ZARA COAT 3';
-
+	const cartBtn = page.locator("[routerlink*='cart']");
 
 	await page.goto("https://rahulshettyacademy.com/client/#/auth/login");
 	await userName.fill("kunapareddy.avi@gmail.com");
@@ -32,4 +32,12 @@ test('Printing the titles of all products using additonal wait', async ({ page }
 			break;
 		}
 	}
+	//clicking on cart button
+	await cartBtn.click();
+	//wait mechanism to make sure all products in the cart are loaded because isVisible don't have auto-wait mechanism
+	await page.locator(".cart li").first().waitFor();
+	/*verifying the product 'ZARA COAT 3' is visible in the cart page
+	by using pseudo-class in the locator and isVisible method*/
+	const isPresent = await page.locator("h3:has-text('ZARA COAT 3')").isVisible();
+	expect(isPresent).toBeTruthy();
 })
