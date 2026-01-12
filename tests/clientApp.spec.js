@@ -5,6 +5,9 @@ test('Printing the titles of all products using additonal wait', async ({ page }
 	const password = page.locator("input#userPassword");
 	const loginBtn = page.locator("input#login");
 	const cardTitles = page.locator(".card-body b");
+	const products = page.locator(".card-body");
+	const productName = 'ZARA COAT 3';
+
 
 	await page.goto("https://rahulshettyacademy.com/client/#/auth/login");
 	await userName.fill("kunapareddy.avi@gmail.com");
@@ -13,8 +16,20 @@ test('Printing the titles of all products using additonal wait', async ({ page }
 
 	//await page.waitForLoadState('networkidle'); //-- not working
 	//will wait until the last element is present
-	await cardTitles.last().waitFor();
+	await cardTitles.first().waitFor();
 	//storing the text of all webelements in array
 	const allTitles = await cardTitles.allTextContents();
+	//printing all the product titles in console
 	console.log(allTitles);
+	//logic to fetch required product name from list of products
+	const count = await products.count();
+	console.log("products count: " + count);
+	for (let i = 0; i < count; i++) {
+		//used locator chaining concept to minimize the scope of search
+		if (await products.nth(i).locator("b").textContent() === productName) {
+			//used new locator concept 'text=text value in DOM' and added product to card
+			await products.nth(i).locator("text=  Add To Cart").click();
+			break;
+		}
+	}
 })
