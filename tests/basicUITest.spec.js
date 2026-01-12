@@ -84,7 +84,7 @@ test('UI controls of login page', async ({ page }) => {
 	await expect(blinkingText).toHaveAttribute("class", "blinkingText");
 })
 
-test.only('Child window handle through event listener', async ({ browser }) => {
+test('Child window handle through event listener', async ({ browser }) => {
 	const context = await browser.newContext();
 	const page = await context.newPage();
 	const userName = page.locator("#username");
@@ -104,9 +104,10 @@ test.only('Child window handle through event listener', async ({ browser }) => {
 	const arrayText = text.split("@");
 	//seperating required text from the partial text
 	const domain = arrayText[1].split(" ")[0];
-	console.log(domain);
+	//console.log(domain);
 	//typing extracted text in username field of previous page
 	await page.locator("#username").fill(domain);
-	console.log(await page.locator("#username").textContent());
+	//fetching dynamically typed input text value using inputValue method
+	console.log(await page.locator("#username").inputValue());
 
 })
