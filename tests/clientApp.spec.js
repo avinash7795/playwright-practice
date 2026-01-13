@@ -1,6 +1,7 @@
 const { test, expect } = require('@playwright/test');
 
 test('Printing the titles of all products using additonal wait', async ({ page }) => {
+	const email = "kunapareddy.avi@gmail.com";
 	const userName = page.locator("input#userEmail");
 	const password = page.locator("input#userPassword");
 	const loginBtn = page.locator("input#login");
@@ -11,7 +12,7 @@ test('Printing the titles of all products using additonal wait', async ({ page }
 	const dropdown = page.locator(".ta-results");
 
 	await page.goto("https://rahulshettyacademy.com/client/#/auth/login");
-	await userName.fill("kunapareddy.avi@gmail.com");
+	await userName.fill(email);
 	await password.fill("Avinash@123");
 	await loginBtn.click();
 
@@ -60,4 +61,14 @@ test('Printing the titles of all products using additonal wait', async ({ page }
 			break;
 		}
 	}
+	//validating the email used for login is present on the place order page
+	await expect(page.locator(".user__name label")).toHaveText(email);
+	//clicking on the Place Order button
+	await page.locator(".action__submit").click();
+	//validating the text "Thankyou for the order." is present in the thank you page
+	await expect(page.locator(".hero-primary")).toHaveText(" Thankyou for the order. ");
+	//grabing the order id from thank you page
+	const orderId = await page.locator(".em-spacer-1 .ng-star-inserted").textContent();
+	//printing order id in the console
+	console.log(orderId);
 })
