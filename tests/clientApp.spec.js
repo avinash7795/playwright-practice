@@ -1,6 +1,6 @@
 const { test, expect } = require('@playwright/test');
 
-test('Printing the titles of all products using additonal wait', async ({ page }) => {
+test('End to end work flow of ecommerce app', async ({ page }) => {
 	const email = "kunapareddy.avi@gmail.com";
 	const userName = page.locator("input#userEmail");
 	const password = page.locator("input#userPassword");
@@ -71,4 +71,23 @@ test('Printing the titles of all products using additonal wait', async ({ page }
 	const orderId = await page.locator(".em-spacer-1 .ng-star-inserted").textContent();
 	//printing order id in the console
 	console.log(orderId);
+	//clicking on "ORDERS" button
+	await page.locator("button[routerlink*='myorders']").click();
+	//waiting for order-details table to be loaded using external wait mechaninsm
+	await page.locator("tbody").waitFor();
+	//collecting rows count from the table
+	const rows = page.locator("tbody tr");
+	//logic to get order-id from the first column of the table and to match with existing orderId
+	for (let i = 0; i < await rows.count(); i++) {
+		const orderIdtext = await rows.nth(i).locator("th").textContent();
+		if (orderId.includes(orderIdtext)) {
+			//clicking on "view" button of matching order id row
+			await rows.nth(i).locator("button").first().click();
+			break;
+		}
+	}
+	//grabing the text of order id from the order details page
+	const orderIdDetails = await page.locator(".col-text").textContent();
+	//validating whether the order id from oder details page is matching with the original order id
+	expect(orderId.includes(orderIdDetails)).toBeTruthy();
 })
