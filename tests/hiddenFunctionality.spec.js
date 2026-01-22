@@ -20,5 +20,6 @@ test('Hidden element functionality', async ({ page }) => {
     page.on('dialog', dialog => dialog.accept());
     //clicking on "Confirm" button to display the alert
     await page.locator("#confirmbtn").click();
-
+    //method to mouse hover on a particular web element
+    await page.locator("#mousehover").hover();
 })
