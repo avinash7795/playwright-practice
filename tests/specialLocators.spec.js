@@ -22,14 +22,4 @@ test('Playwright special locators using angular app', async ({ page }) => {
 	await page.getByRole("link", { name: 'Shop' }).click();
 	//locator chaining using filter and getByRole to select a product and add to cart
 	await page.locator("app-card").filter({ hasText: 'Nokia Edge' }).getByRole("button").click();
-
-
-
-
-
-
-
-
-
-
 })
