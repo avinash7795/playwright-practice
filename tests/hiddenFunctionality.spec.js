@@ -22,4 +22,12 @@ test('Hidden element functionality', async ({ page }) => {
     await page.locator("#confirmbtn").click();
     //method to mouse hover on a particular web element
     await page.locator("#mousehover").hover();
+    //switching to iframe from main page and storing the refrence in a variable
+    const framePage = page.frameLocator("#courses-iframe");
+    //locating the required element using visible feature in locator if rest of the elements are invisible
+    await framePage.locator("li a[href='lifetime-access']:visible").click();
+    //fetching the required text from the iframe web page
+    const textContent = await framePage.locator("div[class='text'] h2").textContent();
+    //separating the required text from the sentence
+    console.log(textContent.split(" ")[1]);
 })
