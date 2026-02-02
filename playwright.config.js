@@ -22,6 +22,8 @@ const config = ({
   use: {
     browserName: 'chromium',
     headless: false,
+    screenshot: 'on',
+    trace: 'on', //off, retain-on-failure
   },
 });
 

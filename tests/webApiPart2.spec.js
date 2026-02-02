@@ -7,8 +7,6 @@ const email = "kunapareddy.avi@gmail.com";
 
 //this method is used to write logic that should be executed to before all test methods
 test.beforeAll(async ({ browser }) => {
-
-
     //creating new browser context
     const context = await browser.newContext();
     //creates a new page in the browser context
@@ -21,7 +19,6 @@ test.beforeAll(async ({ browser }) => {
     const loginBtn = page.locator("input#login");
     const cardTitles = page.locator(".card-body b");
 
-
     await userName.fill(email);
     await password.fill("Avinash@123");
     await loginBtn.click();
@@ -31,9 +28,11 @@ test.beforeAll(async ({ browser }) => {
     await context.storageState({ path: 'state.json' });
     //creating new browser context by injecting stored browser contents
     webContext = await browser.newContext({ storageState: 'state.json' });
+
+
 })
 
-test('End to end work flow of ecommerce app', async () => {
+test('End to end work flow of ecommerce app with API and UI mix', async () => {
 
     //created new page on top of browser context in which the login details like token is injected
     const page = await webContext.newPage();
