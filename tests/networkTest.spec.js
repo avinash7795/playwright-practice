@@ -48,13 +48,15 @@ test('Validate orders page text using util methods and API interception', async 
             //getting real response from API
             const actualResponse = await page.request.fetch(route.request());
             //intercepting response using fulfill- API response->{playwright fake response}->browser -> render data on frontend
-            await route.fulfill({
-                actualResponse,
-                //sending fake api response in the fulfill method to render the same in the browser
-                fakePayloadOrders,
-            })
-
-        });
+            await route.fulfill(
+                {
+                    actualResponse,
+                    //sending fake api response in the fulfill method to render the same in the browser
+                    fakePayloadOrders,
+                }
+            )
+        }
+    );
 
     //clicking on "ORDERS" button
     await page.locator("button[routerlink*='myorders']").click();
