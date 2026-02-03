@@ -20,7 +20,7 @@ test.beforeAll(async () => {
 
 });
 
-test('Validate order Id from orders page using util methods', async ({ page }) => {
+test('Validate orders page text using util methods and API interception', async ({ page }) => {
     const email = "kunapareddy.avi@gmail.com";
     const userName = page.locator("input#userEmail");
     const password = page.locator("input#userPassword");
