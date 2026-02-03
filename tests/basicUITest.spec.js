@@ -27,17 +27,23 @@ test('Extracting error message and validating from web page', async ({ page }) =
 	await expect(page.locator("[style*='block']")).toContainText("Incorrect");
 })
 
-test('Accessing first product of ecommerce application after sucessful Login', async ({ page }) => {
+test.only('Accessing first product of ecommerce application after sucessful Login', async ({ page }) => {
+	//this route.abort method is used to stop all invoking of required API calls
+	//here we have blocked all images to load
+	page.route('**/*.{png,jpg,jpeg}', route => route.abort());
 	const userName = page.locator("input#username");
 	const signIn = page.locator("input#signInBtn");
 	const cardTitles = page.locator(".card-body a");
-
+	//below method is used to log all request urls
+	page.on('request', request => console.log(request.url()));
+	//below method is used to log all response urls along with status codes
+	page.on('response', response => console.log(response.url(), response.status()));
 	await page.goto("https://rahulshettyacademy.com/loginpagePractise/");
 	console.log(await page.title());
 	//used regular expression to match partial page title
 	await expect(page).toHaveTitle(/LoginPage/);
 	await userName.fill("avinash");
-	await page.locator("[type='password']").fill("learning");
+	await page.locator("[type='password']").fill("Learning@830$3mK2");
 	await signIn.click();
 	//extracting error message when given wrong login credentials and printing in console
 	console.log(await page.locator("[style*='block']").textContent());
