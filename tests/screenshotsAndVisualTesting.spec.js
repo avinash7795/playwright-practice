@@ -13,3 +13,10 @@ test('Screenshot and Partial Screenshot functionality', async ({ page }) => {
     //assertion to make sure the text is hidden
     await expect(page.locator('#displayed-text')).toBeHidden();
 });
+
+test.only('Visual Testing with Screenshots', async ({ page }) => {
+    //navigating to google.com
+    await page.goto("https://google.com");
+    //code to compare actual screenshot with expected screenshot as part of visual testing
+    expect(await page.screenshot()).toMatchSnapshot('landingPage.png');
+});
