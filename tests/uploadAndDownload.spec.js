@@ -46,6 +46,9 @@ async function readExcel(worksheet, searchText) {
 
 
 test('Upload and Download Excel data validation test', async ({ page }) => {
+    //storing test data in variables
+    const searchText = "Mango";
+    const replaceText = '350';
     //navigating to upload and download page
     await page.goto("https://rahulshettyacademy.com/upload-download-test/");
     //waiting for file download to complete
@@ -55,10 +58,17 @@ test('Upload and Download Excel data validation test', async ({ page }) => {
     //waiting for download to complete before proceeding with next steps
     await downloadPromise;
     //calling writeExcel function with required arguments
-    await writeExcel("Mango", 350, { rowChange: 0, colChange: 2 }, "C:/Users/avinash.kunapareddy/Downloads/download.xlsx");
+    await writeExcel("Mango", replaceText, { rowChange: 0, colChange: 2 }, "C:/Users/avinash.kunapareddy/Downloads/download.xlsx");
     //clicking on upload button
     await page.locator('#fileinput').click();
     //uploading the modified excel file by setting the file path to file input field
     await page.locator("#fileinput").setInputFiles("C:/Users/avinash.kunapareddy/Downloads/download.xlsx");
+    //storing the locator of the text which is modified in excel file to validate the test case
+    const textLocator = await page.getByText(searchText);
+    //getting the required row locator of the modified text to validate the test case
+    const desiredRow = await page.getByRole('row').filter({ has: textLocator });
+    //asserting the modified text value is displayed in the table after uploading the modified excel file
+    await expect(desiredRow.locator('#cell-4-undefined')).toContainText(replaceText);
 
-});
+}
+);
