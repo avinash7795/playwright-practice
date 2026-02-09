@@ -1,6 +1,5 @@
 const { test, expect } = require('@playwright/test');
-const { LoginPage } = require('../pageobjects/LoginPage');
-const { DashboardPage } = require('../pageobjects/DashboardPage');
+const { POManager } = require('../pageobjects/POManager');
 
 test('End to end work flow of ecommerce app', async ({ page }) => {
 	const userName = "kunapareddy.avi@gmail.com";
@@ -9,14 +8,16 @@ test('End to end work flow of ecommerce app', async ({ page }) => {
 
 	const dropdown = page.locator(".ta-results");
 
-	//creating object of login page to use its methods and locators
-	const loginPage = new LoginPage(page);
+	//creating object of page object manager class to access the objects of page classes and their methods in test files
+	const poManager = new POManager(page);
+	//getting the login page object from page object manager class
+	const loginPage = poManager.getLoginPage();
 	//using login page object to navigate to login page
 	await loginPage.goTo();
 	//using login page object to perform login action by passing username and password
 	await loginPage.validLogin(userName, password);
-	//creating object of dashboard page to use its methods and locators
-	const dashboardPage = new DashboardPage(page);
+	//getting the dashboard page object from page object manager class
+	const dashboardPage = poManager.getDashboardPage();
 	//calling method of dashboard page to fetch required product name and clicking on cart button
 	await dashboardPage.fetchProductAndAddToCart(productName);
 	//clicking on cart button
