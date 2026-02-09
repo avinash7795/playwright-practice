@@ -1,41 +1,26 @@
 const { test, expect } = require('@playwright/test');
 const { LoginPage } = require('../pageobjects/LoginPage');
+const { DashboardPage } = require('../pageobjects/DashboardPage');
 
 test('End to end work flow of ecommerce app', async ({ page }) => {
 	const userName = "kunapareddy.avi@gmail.com";
 	const password = "Avinash@123";
-
-	const cardTitles = page.locator(".card-body b");
-	const products = page.locator(".card-body");
 	const productName = 'ZARA COAT 3';
-	const cartBtn = page.locator("[routerlink*='cart']");
+
 	const dropdown = page.locator(".ta-results");
 
+	//creating object of login page to use its methods and locators
 	const loginPage = new LoginPage(page);
-	loginPage.goTo();
-	loginPage.validLogin(userName, password);
-
-
-	//await page.waitForLoadState('networkidle'); //-- not working
-	//will wait until the last element is present
-	await cardTitles.first().waitFor();
-	//storing the text of all webelements in array
-	const allTitles = await cardTitles.allTextContents();
-	//printing all the product titles in console
-	console.log(allTitles);
-	//logic to fetch required product name from list of products
-	const count = await products.count();
-	console.log("products count: " + count);
-	for (let i = 0; i < count; i++) {
-		//used locator chaining concept to minimize the scope of search
-		if (await products.nth(i).locator("b").textContent() === productName) {
-			//used new locator concept 'text=text value in DOM' and added product to card
-			await products.nth(i).locator("text=  Add To Cart").click();
-			break;
-		}
-	}
+	//using login page object to navigate to login page
+	await loginPage.goTo();
+	//using login page object to perform login action by passing username and password
+	await loginPage.validLogin(userName, password);
+	//creating object of dashboard page to use its methods and locators
+	const dashboardPage = new DashboardPage(page);
+	//calling method of dashboard page to fetch required product name and clicking on cart button
+	await dashboardPage.fetchProductAndAddToCart(productName);
 	//clicking on cart button
-	await cartBtn.click();
+	await dashboardPage.navigateToCart();
 	//wait mechanism to make sure all products in the cart are loaded because isVisible don't have auto-wait mechanism
 	await page.locator(".cart li").first().waitFor();
 	/*verifying the product 'ZARA COAT 3' is visible in the cart page
