@@ -5,6 +5,7 @@ class DashboardPage {
         this.products = page.locator(".card-body");
         this.orders = page.locator("button[routerlink*='myorders']");
         this.cartBtn = page.locator("[routerlink*='cart']");
+        this.myOrdersButton = page.locator("button[routerlink*='myorders']");
     }
 
     //method to fetch required product name from list of products and clicking on cart button
@@ -25,6 +26,10 @@ class DashboardPage {
     //method to navigate to cart page
     async navigateToCart() {
         await this.cartBtn.click();
+    }
+
+    async navigateToMyOrders() {
+        await this.myOrdersButton.click();
     }
 }
 //exporting the DashboardPage class to be used in test files
