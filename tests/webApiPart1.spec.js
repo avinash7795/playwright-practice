@@ -1,5 +1,5 @@
 const { test, expect, request } = require('@playwright/test');
-const { ApiUtils } = require('./utils/ApiUtils');
+const { ApiUtils } = require('../utils/ApiUtils');
 
 //storing request payload in a variable
 const loginData = { userEmail: "kunapareddy.avi@gmail.com", userPassword: "Avinash@123" };
