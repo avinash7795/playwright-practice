@@ -1,7 +1,16 @@
-{
-    "username": "kunapareddy.avi@gmail.com",
-    "password": "Avinash@123",
-    "productName": "ZARA COAT 3",
-    "contryCode": "ind",
-    "country": "India"
-}
+[
+    {
+        "username": "kunapareddy.avi@gmail.com",
+        "password": "Avinash@123",
+        "productName": "ZARA COAT 3",
+        "contryCode": "ind",
+        "country": "India"
+    },
+    {
+        "username": "perag74068@deposin.com",
+        "password": "Iamking@00",
+        "productName": "ADIDAS ORIGINAL",
+        "contryCode": "ind",
+        "country": "India"
+    }
+]
