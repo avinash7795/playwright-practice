@@ -1,10 +1,8 @@
 const { test, expect } = require('@playwright/test');
 const { POManager } = require('../pageobjects/POManager');
+const testData = JSON.parse(JSON.stringify(require('../utils/placeorderTestData.json')));
 
 test('End to end work flow of ecommerce app', async ({ page }) => {
-	const userName = "kunapareddy.avi@gmail.com";
-	const password = "Avinash@123";
-	const productName = 'ZARA COAT 3';
 
 	//creating object of page object manager class to access the objects of page classes and their methods in test files
 	const poManager = new POManager(page);
@@ -13,17 +11,17 @@ test('End to end work flow of ecommerce app', async ({ page }) => {
 	//using login page object to navigate to login page
 	await loginPage.goTo();
 	//using login page object to perform login action by passing username and password
-	await loginPage.validLogin(userName, password);
+	await loginPage.validLogin(testData.username, testData.password);
 	//getting the dashboard page object from page object manager class
 	const dashboardPage = poManager.getDashboardPage();
 	//calling method of dashboard page to fetch required product name and clicking on cart button
-	await dashboardPage.fetchProductAndAddToCart(productName);
+	await dashboardPage.fetchProductAndAddToCart(testData.productName);
 	//navigating to cart page by using method of dashboard page
 	await dashboardPage.navigateToCart();
 	//getting the cart page object from page object manager class
 	const cartPage = poManager.getCartPage();
 	//checking the presence of product in cart page by passing product name
-	const isPresent = await cartPage.isProductInCart(productName);
+	const isPresent = await cartPage.isProductInCart(testData.productName);
 	//verifying the presence of product in cart page to be "True"
 	expect(isPresent).toBeTruthy();
 	//navigating to Checkout page by using method of cart page
@@ -31,9 +29,9 @@ test('End to end work flow of ecommerce app', async ({ page }) => {
 	//getting the orders review page object from page object manager class
 	const ordersReviewPage = poManager.getOrdersReviewPage();
 	//selecting country from the auto suggestive dropdown by passing country code and country name
-	await ordersReviewPage.selectCountry("ind", "India");
+	await ordersReviewPage.selectCountry(testData.contryCode, testData.country);
 	//validating the email used for login is present on the place order page
-	await expect(await ordersReviewPage.getEmail()).toHaveText(userName);
+	await expect(await ordersReviewPage.getEmail()).toHaveText(testData.username);
 	//getting orderId and thank you text by calling submit method of orders review page
 	const { orderId, thankYouText } = await ordersReviewPage.submitAndGetOrderID();
 	//validating the text "Thankyou for the order." is present in the thank you page
