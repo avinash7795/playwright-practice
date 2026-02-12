@@ -1,5 +1,6 @@
 // @ts-check
 import { chromium, defineConfig, devices } from '@playwright/test';
+import { permission } from 'node:process';
 
 /**
  * Read environment variables from file.
@@ -25,7 +26,11 @@ const config = ({
       use: {
         browserName: 'chromium',
         headless: false,
-        // other settings 
+        // other settings
+        viewport: { width: 1920, height: 1080 },
+        ignoreHTTPSErrors: true,
+        permissions: ['geolocation', 'notifications'],
+        video: 'retain-on-failure',
       }
     },
     {
@@ -41,7 +46,8 @@ const config = ({
       use: {
         browserName: 'webkit',
         headless: false,
-        // other settings 
+        // other settings
+        ...devices['iPhone 12 Pro'],
       }
     }
   ],
