@@ -1,5 +1,8 @@
 const { test, expect } = require('@playwright/test');
 
+//to run tests in parallel mode
+test.describe.configure({ mode: 'parallel' });
+
 test('First Test Script in Playwright', async ({ browser }) => {
 	const context = await browser.newContext();
 	const page = await context.newPage();
@@ -27,7 +30,7 @@ test('Extracting error message and validating from web page', async ({ page }) =
 	await expect(page.locator("[style*='block']")).toContainText("Incorrect");
 })
 
-test.only('Accessing first product of ecommerce application after sucessful Login', async ({ page }) => {
+test('Accessing first product of ecommerce application after sucessful Login', async ({ page }) => {
 	//this route.abort method is used to stop all invoking of required API calls
 	//here we have blocked all images to load
 	page.route('**/*.{png,jpg,jpeg}', route => route.abort());
