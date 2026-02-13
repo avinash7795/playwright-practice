@@ -15,6 +15,7 @@ import { permission } from 'node:process';
  */
 const config = ({
   testDir: './tests',
+  retries: 1,
   timeout: 40000,
   expect: {
     timeout: 10000,
