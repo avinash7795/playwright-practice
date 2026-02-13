@@ -1,5 +1,6 @@
 // @ts-check
 import { chromium, defineConfig, devices } from '@playwright/test';
+import { workers } from 'node:cluster';
 import { permission } from 'node:process';
 
 /**
@@ -16,6 +17,7 @@ import { permission } from 'node:process';
 const config = ({
   testDir: './tests',
   retries: 1,
+  workers: 2,
   timeout: 40000,
   expect: {
     timeout: 10000,
