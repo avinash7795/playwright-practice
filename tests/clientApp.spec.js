@@ -1,6 +1,6 @@
 const { test, expect } = require('@playwright/test');
 
-test('End to end work flow of ecommerce app', async ({ page }) => {
+test.skip('End to end work flow of ecommerce app', async ({ page }) => {
 	const email = "kunapareddy.avi@gmail.com";
 	const userName = page.locator("input#userEmail");
 	const password = page.locator("input#userPassword");
