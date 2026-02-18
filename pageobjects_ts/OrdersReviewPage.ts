@@ -38,20 +38,23 @@ export class OrdersReviewPage {
 
     //method to return email locator from orders review page
     async getEmail() {
-        return await this.page.locator(".user__name label");
+        return this.page.locator(".user__name label");
     }
 
     //method to return order id and thank you text locator by clicking on place order button
-    async submitAndGetOrderID() {
+
+    async submitAndGetOrderDetails(): Promise<{ orderId: any; thankYouText: Locator }> {
         await this.submitButton.click();
+        // Wait for thank you text to appear (success state)
+        await this.thankYouTextLocator.waitFor({ state: 'visible' });
+        const orderId = await this.orderId.textContent();
         return {
-            orderId: await this.orderId.textContent(),
+            orderId,
             thankYouText: this.thankYouTextLocator
         };
+
+
+
     }
-
-
 }
-
-//exporting the OrdersReviewPage class to be used in test files
-module.exports = { OrdersReviewPage };
+module
