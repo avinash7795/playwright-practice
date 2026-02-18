@@ -1,0 +1,14 @@
+var message1 = "bye";
+console.log(message1);
+var age = 25;
+console.log(age);
+var isStudent = true;
+console.log(isStudent);
+var names = ["Alice", "Bob", "Charlie"];
+console.log(names);
+var numArray = [1, 2, 3, 4, 5];
+console.log(numArray);
+var data = "This can be any type";
+console.log(data);
+data = 42;
+console.log(data);
