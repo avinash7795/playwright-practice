@@ -1,20 +1,13 @@
 //importing the required modules and classes
 const { Given, When, Then } = require('@cucumber/cucumber');
-const { POManager } = require('../../pageobjects/POManager');
 const { expect } = require('@playwright/test');
 //importing the playwright keyword from playwright test module to launch the browser and create page object
-const playwright = require('@playwright/test');
+
 
 //defining the step definitions for the steps mentioned in feature file
 Given('A login to the ecommerce website with valid {string} and {string}', { timeout: 100 * 1000 }, async function (username, password) {
     //storing the username in a variable using World constructor principle to use it in later steps for validation
     this.data_username = username;
-    //launching the browser and creating page object using playwright keyword
-    const browser = await playwright.chromium.launch({ headless: false });
-    const context = await browser.newContext();
-    const page = await context.newPage();
-    //creating object of page object manager class to access the objects of page classes and their methods in test files
-    this.poManager = new POManager(page);
     //getting the login page object from page object manager class
     const loginPage = this.poManager.getLoginPage();
     //using login page object to navigate to login page
