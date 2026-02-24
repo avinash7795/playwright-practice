@@ -1,63 +1,67 @@
 const { Given, When, Then } = require('@cucumber/cucumber');
 const { POManager } = require('../../pageobjects/POManager');
-const { test, expect, playwright } = require('@playwright/test');
+const { expect } = require('@playwright/test');
+const playwright = require('@playwright/test');
 
-Given('A login to the ecommerce website with valid {username} and {password}', async function (username, password) {
-    const browser = await playwright.chromium.launch();
+Given('A login to the ecommerce website with valid {string} and {string}', { timeout: 100 * 1000 }, async function (username, password) {
+    this.data_username = username;
+    const browser = await playwright.chromium.launch({ headless: false });
     const context = await browser.newContext();
     const page = await context.newPage();
     //creating object of page object manager class to access the objects of page classes and their methods in test files
-    const poManager = new POManager(page);
+    this.poManager = new POManager(page);
     //getting the login page object from page object manager class
-    const loginPage = poManager.getLoginPage();
+    const loginPage = this.poManager.getLoginPage();
     //using login page object to navigate to login page
     await loginPage.goTo();
     //using login page object to perform login action by passing username and password from test data file
-    await loginPage.validLogin(data.username, data.password);
+    await loginPage.validLogin(this.data_username, password);
 });
 
-When('Add a product {string} to the cart', async function (string) {
+When('Add a product {string} to the cart', async function (productName) {
     //getting the dashboard page object from page object manager class
-    const dashboardPage = poManager.getDashboardPage();
+    this.dashboardPage = this.poManager.getDashboardPage();
     //calling method of dashboard page to fetch required product name and clicking on cart button
-    await dashboardPage.fetchProductAndAddToCart(data.productName);
+    await this.dashboardPage.fetchProductAndAddToCart(productName);
     //navigating to cart page by using method of dashboard page
-    await dashboardPage.navigateToCart();
+    await this.dashboardPage.navigateToCart();
 });
 
-Then('Verify the product {string} is visible in the cart', async function (string) {
+Then('Verify the product {string} is visible in the cart', { timeout: 100 * 1000 }, async function (productName) {
     //getting the cart page object from page object manager class
-    const cartPage = poManager.getCartPage();
+    const cartPage = this.poManager.getCartPage();
     //checking the presence of product in cart page by passing product name from test data file
-    const isPresent = await cartPage.isProductInCart(data.productName);
+    const isPresent = await cartPage.isProductInCart(productName);
     //verifying the presence of product in cart page to be "True"
     expect(isPresent).toBeTruthy();
-});
-
-When('Proceed to checkout and submit the order', async function () {
     //navigating to Checkout page by using method of cart page
     await cartPage.clickCheckout();
+});
+
+When('Proceed to checkout and submit the order', { timeout: 100 * 1000 }, async function () {
     //getting the orders review page object from page object manager class
-    const ordersReviewPage = poManager.getOrdersReviewPage();
+    const ordersReviewPage = this.poManager.getOrdersReviewPage();
     //selecting country from the auto suggestive dropdown by passing country code and country name from fixture
-    await ordersReviewPage.selectCountry(testDataForOrder.contryCode, testDataForOrder.country);
+    await ordersReviewPage.selectCountry("ind", "India");
     //validating the email used for login is present on the place order page
-    await expect(await ordersReviewPage.getEmail()).toHaveText(testDataForOrder.username);
+    await expect(await ordersReviewPage.getEmail()).toHaveText(this.data_username);
     //getting orderId and thank you text by calling submit method of orders review page
     const { orderId, thankYouText } = await ordersReviewPage.submitAndGetOrderID();
+    this.data_orderId = orderId;
+    console.log("Order ID is: " + this.data_orderId);
     //validating the text "Thankyou for the order." is present in the thank you page
     await expect(thankYouText).toHaveText(" Thankyou for the order. ");
 });
 
 Then('Verify the order is present in the order history page', async function () {
     //navigating to "ORDERS" page by using method of dashboard page
-    await dashboardPage.navigateToMyOrders();
+    await this.dashboardPage.navigateToMyOrders();
     //getting the order history page object from page object manager class
-    const orderHistoryPage = poManager.getOrderHistoryPage();
+    const orderHistoryPage = this.poManager.getOrderHistoryPage();
     //searching for the order id in the order history page
-    await orderHistoryPage.searchOrderAndSelect(orderId);
+    await orderHistoryPage.searchOrderAndSelect(this.data_orderId);
     //grabing the text of order id from the order details page
     const orderIdDetails = await orderHistoryPage.getOrderIdFromTable();
     //validating whether the order id from oder details page is matching with the original order id
-    expect(orderId.includes(orderIdDetails)).toBeTruthy();
+    expect(this.data_orderId.includes(orderIdDetails)).toBeTruthy();
 });
