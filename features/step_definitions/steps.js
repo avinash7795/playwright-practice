@@ -1,10 +1,15 @@
+//importing the required modules and classes
 const { Given, When, Then } = require('@cucumber/cucumber');
 const { POManager } = require('../../pageobjects/POManager');
 const { expect } = require('@playwright/test');
+//importing the playwright keyword from playwright test module to launch the browser and create page object
 const playwright = require('@playwright/test');
 
+//defining the step definitions for the steps mentioned in feature file
 Given('A login to the ecommerce website with valid {string} and {string}', { timeout: 100 * 1000 }, async function (username, password) {
+    //storing the username in a variable using World constructor principle to use it in later steps for validation
     this.data_username = username;
+    //launching the browser and creating page object using playwright keyword
     const browser = await playwright.chromium.launch({ headless: false });
     const context = await browser.newContext();
     const page = await context.newPage();
@@ -14,7 +19,7 @@ Given('A login to the ecommerce website with valid {string} and {string}', { tim
     const loginPage = this.poManager.getLoginPage();
     //using login page object to navigate to login page
     await loginPage.goTo();
-    //using login page object to perform login action by passing username and password from test data file
+    //using login page object to perform login action by passing username and password from feature file
     await loginPage.validLogin(this.data_username, password);
 });
 
@@ -30,7 +35,7 @@ When('Add a product {string} to the cart', async function (productName) {
 Then('Verify the product {string} is visible in the cart', { timeout: 100 * 1000 }, async function (productName) {
     //getting the cart page object from page object manager class
     const cartPage = this.poManager.getCartPage();
-    //checking the presence of product in cart page by passing product name from test data file
+    //checking the presence of product in cart page by passing product name from feature file
     const isPresent = await cartPage.isProductInCart(productName);
     //verifying the presence of product in cart page to be "True"
     expect(isPresent).toBeTruthy();
@@ -41,13 +46,15 @@ Then('Verify the product {string} is visible in the cart', { timeout: 100 * 1000
 When('Proceed to checkout and submit the order', { timeout: 100 * 1000 }, async function () {
     //getting the orders review page object from page object manager class
     const ordersReviewPage = this.poManager.getOrdersReviewPage();
-    //selecting country from the auto suggestive dropdown by passing country code and country name from fixture
+    //selecting country from the auto suggestive dropdown by passing country code and country name
     await ordersReviewPage.selectCountry("ind", "India");
     //validating the email used for login is present on the place order page
     await expect(await ordersReviewPage.getEmail()).toHaveText(this.data_username);
     //getting orderId and thank you text by calling submit method of orders review page
     const { orderId, thankYouText } = await ordersReviewPage.submitAndGetOrderID();
+    //storing the order id in a variable using World constructor principle to use it in later steps for validation
     this.data_orderId = orderId;
+    //printing the order id in the console
     console.log("Order ID is: " + this.data_orderId);
     //validating the text "Thankyou for the order." is present in the thank you page
     await expect(thankYouText).toHaveText(" Thankyou for the order. ");
