@@ -1,5 +1,10 @@
 Feature: Error Validations
     @Validation
-    Scenario: Validating the login error message
-        Given A login to the ecommerce website with invalid "kunapareddy.avi@gmail.com" and "Avinash@123"
+    Scenario Outline: Validating the login error message
+        Given A login to the ecommerce website with invalid "<username>" and "<password>"
         Then Verify the error message is displayed
+
+        Examples:
+            | username                  | password         |
+            | kunapareddy.avi@gmail.com | IncorrectPass123 |
+            | testuser2@gmail.com       | wrongpass456     |
