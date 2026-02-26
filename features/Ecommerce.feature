@@ -1,5 +1,5 @@
 Feature: Ecommerce Validations
-
+    @Regression
     Scenario: Placing the order successfully
         Given A login to the ecommerce website with valid "kunapareddy.avi@gmail.com" and "Avinash@123"
         When Add a product "ZARA COAT 3" to the cart
