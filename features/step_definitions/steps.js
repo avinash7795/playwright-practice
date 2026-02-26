@@ -65,3 +65,21 @@ Then('Verify the order is present in the order history page', async function () 
     //validating whether the order id from oder details page is matching with the original order id
     expect(this.data_orderId.includes(orderIdDetails)).toBeTruthy();
 });
+
+Given('A login to the ecommerce website with invalid {string} and {string}', { timeout: 100 * 1000 }, async function (username, password) {
+
+    await this.page.goto("https://rahulshettyacademy.com/loginpagePractise/");
+    console.log(await this.page.title());
+    //used regular expression to match partial page title
+    await expect(this.page).toHaveTitle(/LoginPage/);
+    await this.page.locator("input#username").fill(username);
+    await this.page.locator("[type='password']").fill(password);
+    await this.page.locator("input#signInBtn").click();
+});
+
+Then('Verify the error message is displayed', async function () {
+    //extracting error message when given wrong login credentials and printing in console
+    console.log(await this.page.locator("[style*='block']").textContent());
+    //adding assertion to validate the partial text of error message
+    await expect(this.page.locator("[style*='block']")).toContainText("Incorrect");
+});
