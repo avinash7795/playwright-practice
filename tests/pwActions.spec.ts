@@ -35,15 +35,32 @@ test("Check Box Actions", async ({ page }) => {
     await sundayCheckBox.check();
     await expect(sundayCheckBox).toBeChecked();
 
-    //select all checkboxes
+
     const days: string[] = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
     const checkboxes: Locator[] = days.map(index => page.getByLabel(index));
     expect(checkboxes.length).toBe(7);
+    //select all checkboxes
     for (const checkbox of checkboxes) {
         await checkbox.check();
         await expect(checkbox).toBeChecked();
     }
 
+    //unselect last 3 checkboxes
+    for (const checkbox of checkboxes.slice(-3)) {
+        await checkbox.uncheck();
+        await expect(checkbox).not.toBeChecked();
+    }
+    //unselect already selected checkboxes and select already unselected checkboxes
+    for (const checkbox of checkboxes) {
+        if (await checkbox.isChecked()) {
+            await checkbox.uncheck();
+            await expect(checkbox).not.toBeChecked();
+        }
+        else {
+            await checkbox.check();
+            await expect(checkbox).toBeChecked();
+        }
+    }
 });
 
 
