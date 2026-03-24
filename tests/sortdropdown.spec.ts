@@ -7,7 +7,7 @@ test("select dropdown options", async ({ page }) => {
     const trimmedText = dropdownTextContent.map(text => text.trim());
     const orginalList: string[] = [...trimmedText];
     const sortedTrimmedText: string[] = [...trimmedText].sort();
-    expect(orginalList).toEqual(sortedTrimmedText);
+    expect(trimmedText).toEqual(sortedTrimmedText);
 
 
 
