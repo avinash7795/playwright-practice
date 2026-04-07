@@ -25,7 +25,7 @@ test('test to-do app', async ({ page }) => {
         await page.getByTestId('text-input').press('Enter');
     });
 
-    await test.step("Typing 'Ypie' task in todo list", async () => {
+    await test.step("Typing 'Office' task in todo list", async () => {
         await page.getByTestId('text-input').fill('Office');
         await page.getByTestId('text-input').press('Enter');
     });
@@ -35,7 +35,7 @@ test('test to-do app', async ({ page }) => {
         await page.getByTestId('text-input').press('Enter');
     });
 
-    await test.step("Typing 'Rest' task in todo list", async () => {
+    await test.step("Typing 'Sleep' task in todo list", async () => {
         await page.getByTestId('text-input').fill('Sleep');
         await page.getByTestId('text-input').press('Enter');
     });
